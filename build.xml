@@ -18,7 +18,7 @@
 	+ -->
 	
 	<property name="processing.classes"
-			  location="/Users/fjenett/Desktop/Processing-2.0b8.app/Contents/Resources/Java/" />
+			  location="/Applications/Processing 2.0b8/Processing-2.0b8.app/Contents/Resources/Java/" />
 
 	<property name="processing.modes" 
 			  location="/Users/fjenett/Documents/Processing/modes"/>
@@ -121,10 +121,9 @@
 			<fileset dir="${dist}" />
 		</copy>
 		
-		<zip destfile="release/${lib.name}.zip"
-	  	     basedir="${dist}"
-	  	     excludes="**/_DS.Store"
-		/>
+		<zip destfile="release/${lib.name}.zip" >
+			<zipfileset dir="${dist}" prefix="${lib.name}" excludes="**/_DS.Store" />
+		</zip>
 		<copy tofile="release/${lib.name}.txt">
 			<fileset file="${dist}/mode.properties" />
 		</copy>
