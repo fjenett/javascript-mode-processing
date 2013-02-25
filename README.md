@@ -1,4 +1,8 @@
-javascript-mode-processing
+Processing JavaScript Mode
 ==========================
 
-Former ProcessingJS mode (Processing 1.5) that became JavaScript mode (Processing 2.0 beta) that has now been moved out of the Processing IDE.
+This is the former ProcessingJS mode (for Processing 1.5) that became Processings internal JavaScript mode (until 2.0 beta 8) and has now been moved out of the Processing IDE.
+
+Use *[Mode menu] --> Add Mode ...* to install into your PDE.
+
+Tested with Processing 2.0 beta 8 or higher.

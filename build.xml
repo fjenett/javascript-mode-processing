@@ -1,0 +1,147 @@
+<project name="ProcessingJavaScriptMode" default="install" basedir="./">
+
+	<description>
+	
+		This used to be "ProcessingJS Mode", has been "JavaScript Mode" in
+		Processing 2.0 beta for a while and now lives a life of it's own
+		here ... waiting to be reincluded at some point in the future.
+
+		JavaScript mode:
+		https://github.com/fjenett/javascript-mode-processing
+	
+	</description>
+
+	<!-- +
+	+
+	+	This is really all you should need to set to compile:	
+	+
+	+ -->
+	
+	<property name="processing.classes"
+			  location="/Users/fjenett/Desktop/Processing-2.0b8.app/Contents/Resources/Java/" />
+
+	<property name="processing.modes" 
+			  location="/Users/fjenett/Documents/Processing/modes"/>
+
+	<!-- +
+	+
+	+	Hands off below!
+	+
+	+ -->
+	
+	<property name="src" 		value="src" />
+	<property name="build" 		value="build" />
+	<property name="bin" 		value="bin" />
+	<property name="dist" 		value="dist" />
+	<property name="release" 	value="0.3" /><!-- starting anew at 0.3 -->
+	<property name="lib.name" 	value="JavaScriptMode" />
+	<property name="java.target.version" 
+								value="1.5" />
+
+	<path id="library-classpath">
+		<fileset dir="${processing.classes}" >
+			<include name="core/library/core.jar" />
+			<include name="lib/pde.jar" />
+			<include name="lib/antlr.jar" />
+		</fileset>
+		<fileset dir="lib" >
+			<!-- Rhino 1.7 -->
+			<include name="js.jar" />
+		</fileset>
+	</path>
+	
+	<!-- - - - - - - - - - - - - - - - - - - - - - -
+		HELP
+	- - - - - - - - - - - - - - - - - - - - - - - -->
+	<target name="help">
+		<echo>No help, Florian is a lazy shmug</echo>
+	</target>
+	
+	<!-- - - - - - - - - - - - - - - - - - - - - - -
+		BUILD
+	- - - - - - - - - - - - - - - - - - - - - - - -->
+	<target name="build">
+		
+		<buildnumber file="lib/build.number"/>
+		
+		<mkdir dir="${build}" />
+		<delete dir="${bin}" />
+		<mkdir dir="${bin}" />
+		
+		<javac srcdir="${src}" destdir="${bin}" source="${java.target.version}">
+			<classpath>
+				<path refid="library-classpath"/>
+			</classpath>
+		</javac>
+		
+	</target>
+	
+	<!-- - - - - - - - - - - - - - - - - - - - - - -
+		PACKAGE
+	- - - - - - - - - - - - - - - - - - - - - - - -->
+	<target name="package" depends="build">
+		
+		<delete dir="${dist}" />
+		<mkdir dir="${dist}" />
+		<mkdir dir="${dist}/mode" />
+		
+		<jar jarfile="${dist}/mode/${lib.name}.jar" basedir="${bin}"/>
+		<!--zip destfile="${dist}/mode/${lib.name}.jar" excludes="**/*.MF">
+		    <zipgroupfileset dir="lib" includes="*.jar" />
+		</zip-->
+		<copy todir="${dist}/mode">
+			<fileset file="lib/js.jar" />
+		</copy>
+		
+		<copy todir="${dist}">
+			<fileset dir="resources/" />
+		</copy>
+		
+		<replaceregexp file="${dist}/mode.properties" flags="g"
+  					   match="@@version@@" replace="${build.number}" />
+		<replaceregexp file="${dist}/mode.properties" flags="g"
+  					   match="@@pretty-version@@" replace="${release}" />
+		
+	</target>
+	
+	<!-- - - - - - - - - - - - - - - - - - - - - - -
+		INSTALL
+	- - - - - - - - - - - - - - - - - - - - - - - -->
+	<target name="install" depends="package" >
+		
+		<delete dir="${processing.modes}/${lib.name}" />
+		<mkdir dir="${processing.modes}/${lib.name}" />
+		
+		<copy todir="${processing.modes}/${lib.name}">
+			<fileset dir="${dist}" />
+		</copy>
+		
+		<delete dir="${lib.name}" />
+		<copy todir="${lib.name}">
+			<fileset dir="${dist}" />
+		</copy>
+		
+		<zip destfile="release/${lib.name}.zip"
+	  	     basedir="${dist}"
+	  	     excludes="**/_DS.Store"
+		/>
+		<copy tofile="release/${lib.name}.txt">
+			<fileset file="${dist}/mode.properties" />
+		</copy>
+
+		<delete dir="${dist}" />
+	</target>
+
+	<!-- - - - - - - - - - - - - - - - - - - - - - -
+		CLEAN
+	- - - - - - - - - - - - - - - - - - - - - - - -->
+	<target name="clean" >
+
+		<delete dir="${bin}" />
+		<delete dir="${build}" />
+		<delete dir="${lib.name}" />
+
+	</target>
+
+</project>
+
