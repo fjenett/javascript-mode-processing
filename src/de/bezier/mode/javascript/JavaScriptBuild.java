@@ -300,7 +300,7 @@ public class JavaScriptBuild
 					{
 						Base.copyFile( libJS,
 									   libJSDestFile );
-						jsImports.add( libJSDest );
+						jsImports.add( libJSDest.replaceAll( File.separator, "/" ) );
 
 					} catch ( Exception se ) {
 						se.printStackTrace();
