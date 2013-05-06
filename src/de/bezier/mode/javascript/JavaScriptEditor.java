@@ -197,7 +197,7 @@ public class JavaScriptEditor extends ServingEditor
 	 */
   public JMenu buildHelpMenu ()
   {
-    JMenu menu = new JMenu("Help ");
+    JMenu menu = new JMenu("Help");
     JMenuItem item;
 
 	// TODO switch to "http://js.processing.org/"?
@@ -275,17 +275,17 @@ public class JavaScriptEditor extends ServingEditor
       });
     menu.add(item);
 
-    // OSX has its own about menu
-    if (!Base.isMacOS()) {
-      menu.addSeparator();
-      item = new JMenuItem("About Processing");
-      item.addActionListener( new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          base.handleAbout();
-        }
-      });
-      menu.add(item);
-    }
+    // // OSX has its own about menu
+    // if (!Base.isMacOS()) {
+    //   menu.addSeparator();
+    //   item = new JMenuItem("About Processing");
+    //   item.addActionListener( new ActionListener() {
+    //     public void actionPerformed(ActionEvent e) {
+    //       base.handleAbout();
+    //     }
+    //   });
+    //   menu.add(item);
+    // }
 
     return menu;
   }
