@@ -205,7 +205,7 @@ public class JavaScriptEditor extends ServingEditor
     item = new JMenuItem("QuickStart for Processing Devs");
     item.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        Base.openURL("http://processingjs.org/reference/articles/p5QuickStart");
+        Base.openURL("http://processingjs.org/articles/p5QuickStart.html");
       }
     });
     menu.add(item);
@@ -213,7 +213,7 @@ public class JavaScriptEditor extends ServingEditor
     item = new JMenuItem("QuickStart for JavaScript Devs");
     item.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        Base.openURL("http://processingjs.org/reference/articles/jsQuickStart");
+        Base.openURL("http://processingjs.org/articles/jsQuickStart.html");
       }
     });
     menu.add(item);
@@ -243,7 +243,7 @@ public class JavaScriptEditor extends ServingEditor
       public void actionPerformed(ActionEvent e) {
         //TODO get offline reference archive corresponding to the release
         // packaged with this mode see: P.js ticket 1146 "Offline Reference"
-        Base.openURL("http://processingjs.org/reference");
+        Base.openURL("http://processingjs.org/reference/");
       }
     });
     menu.add(item);
@@ -271,6 +271,14 @@ public class JavaScriptEditor extends ServingEditor
     item.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           Base.openURL("http://processingjs.org/");
+        }
+      });
+    menu.add(item);
+
+    item = new JMenuItem("Report a JavaScriptMode bug");
+    item.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          Base.openURL("https://github.com/fjenett/javascript-mode-processing/issues");
         }
       });
     menu.add(item);
