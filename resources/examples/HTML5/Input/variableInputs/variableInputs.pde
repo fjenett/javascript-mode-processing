@@ -15,7 +15,7 @@
   *    2) the layout based upon the values received from inputs
   */
  
- String[] menuItems;
+ String[][] menuItems;
  
  // dafault input values
  int currentShape = 2;
