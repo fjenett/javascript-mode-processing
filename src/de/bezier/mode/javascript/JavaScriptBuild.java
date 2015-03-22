@@ -89,10 +89,9 @@ public class JavaScriptBuild
             String value = fields.get(sb.substring(start+2, end));
             sb.replace(start, end+2, value == null ? "" : value );
           } else {
-            Base.showWarning("Problem writing file from template",
+            Base.showWarning("Problem replacing field in template",
                              "The template appears to have an unterminated " +
-                             "field. The output may look a little funny.",
-                             null);
+                             "field. The output may look a little funny.");
           }
         }
         line = sb.toString();
@@ -170,7 +169,8 @@ public class JavaScriptBuild
                            "You may have to manually move the contents of sketch/data to " +
                            "the web-export/ folder. Processing.js doesn't look for a data " +
                            "folder, so lump them together.";
-        Base.showWarning("Problem building the sketch", msg, e);
+        Base.showWarning("Problem building the sketch", msg);
+        e.printStackTrace();
       }
     }
 
@@ -196,7 +196,8 @@ public class JavaScriptBuild
 			Base.copyFile( new File(sketch.getFolder(), s), new File(bin, s) );
 		} catch ( IOException ioe ) {
 			String msg = "Unable to copy file: "+s;
-			Base.showWarning("Problem building the sketch", msg, ioe);
+			Base.showWarning("Problem building the sketch", msg);
+			ioe.printStackTrace();
 			return false;
 		}
 	}
@@ -228,7 +229,7 @@ public class JavaScriptBuild
 	          "HTML file to set the size of the applet.\n" +
 	          "Use only numeric values (not variables) for the size()\n" +
 	          "command. See the size() reference for an explanation.";
-	        Base.showWarning("Could not find applet size", message, null);
+	        Base.showWarning("Could not find applet size", message);
 			// warn only once ..
 			((JavaScriptMode)mode).showSizeWarning = false;
 		}
@@ -272,8 +273,7 @@ public class JavaScriptBuild
 		if ( !libsExport.mkdir() )
 		{
 			Base.showWarning( "Error",
-			 				  "Unable to create 'libs' in export folder.",
-							  null );
+			 				  "Unable to create 'libs' in export folder." );
 			return false;
 		}
 	}
@@ -374,7 +374,8 @@ public class JavaScriptBuild
     } catch (IOException ioe) {
       final String msg = "There was a problem writing the html template " +
       		               "to the build folder.";
-      Base.showWarning("A problem occured during the build", msg, ioe);
+      Base.showWarning("A problem occured during the build", msg);
+      ioe.printStackTrace();
       return false;
     }
 
@@ -397,7 +398,8 @@ public class JavaScriptBuild
 	                         "build folder. You will have to manually add " +
 	                         defaultJSFile +" to the build folder before the sketch " +
 	                         "will run.";
-	      Base.showWarning( "There was a problem writing to the build folder", msg, ioe);
+	      Base.showWarning( "There was a problem writing to the build folder", msg);
+	      ioe.printStackTrace();
 	      //return false;
 	    }
 	}
@@ -431,7 +433,8 @@ public class JavaScriptBuild
 			return new File( customTemplateFolder, TEMPLATE_FILE_NAME );
 		} catch ( Exception e ) {
 			String msg = "";
-			Base.showWarning("There was a problem copying your custom template folder", msg, e);
+			Base.showWarning("There was a problem copying your custom template folder", msg);
+			e.printStackTrace();
 			return sketch.getMode().getContentFile(
 				TEMPLATE_FOLDER_NAME + File.separator + TEMPLATE_FILE_NAME
 			);
