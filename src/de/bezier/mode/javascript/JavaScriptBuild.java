@@ -379,29 +379,34 @@ public class JavaScriptBuild
       return false;
     }
 
-    // finally, add files processing.js
+    // finally, add files
 	String[] defaultJSFiles = new String[]{
 		"processing.js" /*, "qrcode.js"*/
 	};
 	for ( String defaultJSFile : defaultJSFiles )
 	{
-	    try
+		File fileToCopy = new File( bin, defaultJSFile );
+		
+		if ( !fileToCopy.exists() ) 
 		{
-	      Base.copyFile( sketch.getMode().getContentFile(
-							TEMPLATE_FOLDER_NAME + File.separator + defaultJSFile
-						 ),
-	                     new File( bin, defaultJSFile )
-		  );
+		    try
+			{
+		      Base.copyFile( sketch.getMode().getContentFile(
+								TEMPLATE_FOLDER_NAME + File.separator + defaultJSFile
+							 ),
+		                     new File( bin, defaultJSFile )
+			  );
 
-	    } catch (IOException ioe) {
-	      final String msg = "There was a problem copying " +defaultJSFile+ " to the " +
-	                         "build folder. You will have to manually add " +
-	                         defaultJSFile +" to the build folder before the sketch " +
-	                         "will run.";
-	      Base.showWarning( "There was a problem writing to the build folder", msg);
-	      ioe.printStackTrace();
-	      //return false;
-	    }
+		    } catch (IOException ioe) {
+		      final String msg = "There was a problem copying " +defaultJSFile+ " to the " +
+		                         "build folder. You will have to manually add " +
+		                         defaultJSFile +" to the build folder before the sketch " +
+		                         "will run.";
+		      Base.showWarning( "There was a problem writing to the build folder", msg);
+		      ioe.printStackTrace();
+		      //return false;
+		    }
+		}
 	}
 
     return true;
