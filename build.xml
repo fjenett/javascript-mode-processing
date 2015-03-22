@@ -18,7 +18,7 @@
 	+ -->
 	
 	<property name="processing.classes"
-			  location="/Users/fjenett/Repos/processing/build/macosx/work/Processing.app/Contents/Resources/Java/" />
+			  location="/Applications/Processing-2.2.1/Processing.app/Contents/Java/" />
 
 	<property name="processing.modes" 
 			  location="/Users/fjenett/Documents/Processing/modes"/>
@@ -33,16 +33,17 @@
 	<property name="build" 		value="build" />
 	<property name="bin" 		value="bin" />
 	<property name="dist" 		value="dist" />
-	<property name="release" 	value="0.3.1" /><!-- starting anew at 0.3 -->
+	<property name="release" 	value="0.3.2" /><!-- starting anew at 0.3 -->
 	<property name="lib.name" 	value="JavaScriptMode" />
 	<property name="java.target.version" 
 								value="1.5" />
 
 	<path id="library-classpath">
 		<fileset dir="${processing.classes}" >
+			<include name="core.jar" />
 			<include name="core/library/core.jar" />
-			<include name="lib/pde.jar" />
-			<include name="lib/antlr.jar" />
+			<include name="pde.jar" />
+			<include name="antlr.jar" />
 		</fileset>
 		<fileset dir="lib" >
 			<!-- Rhino 1.7 -->
