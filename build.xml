@@ -18,7 +18,7 @@
 	+ -->
 	
 	<property name="processing.classes"
-			  location="/Applications/Processing-2.2.1/Processing.app/Contents/Java/" />
+			  location="/Applications/Processing-3.0b2/Processing.app/Contents/Java/" />
 
 	<property name="processing.modes" 
 			  location="/Users/fjenett/Documents/Processing/modes"/>
@@ -33,7 +33,7 @@
 	<property name="build" 		value="build" />
 	<property name="bin" 		value="bin" />
 	<property name="dist" 		value="dist" />
-	<property name="release" 	value="0.3.3" /><!-- starting anew at 0.3 -->
+	<property name="release" 	value="0.4.0" />
 	<property name="lib.name" 	value="JavaScriptMode" />
 	<property name="java.target.version" 
 								value="1.5" />
