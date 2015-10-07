@@ -18,16 +18,10 @@
 	+ -->
 	
 	<property name="processing.classes"
-			  location="/Applications/Processing-3.0b2/Processing.app/Contents/Java/" />
+			  location="/Applications/Processing-3.0/Processing.app/Contents/Java/" />
 
 	<property name="processing.modes" 
-			  location="/Users/fjenett/Documents/Processing/modes"/>
-
-	<!-- +
-	+
-	+	Hands off below!
-	+
-	+ -->
+			  location="/Users/fjenett/Documents/Processing-3/modes"/>
 	
 	<property name="src" 		value="src" />
 	<property name="build" 		value="build" />
@@ -36,14 +30,15 @@
 	<property name="release" 	value="0.4.0" />
 	<property name="lib.name" 	value="JavaScriptMode" />
 	<property name="java.target.version" 
-								value="1.5" />
+								value="1.7" />
 
 	<path id="library-classpath">
 		<fileset dir="${processing.classes}" >
 			<include name="core.jar" />
 			<include name="core/library/core.jar" />
 			<include name="pde.jar" />
-			<include name="antlr.jar" />
+			<include name="modes/java/mode/antlr.jar" />
+			<include name="modes/java/mode/JavaMode.jar" />
 		</fileset>
 		<fileset dir="lib" >
 			<!-- Rhino 1.7 -->
@@ -55,7 +50,6 @@
 		HELP
 	- - - - - - - - - - - - - - - - - - - - - - - -->
 	<target name="help">
-		<echo>No help, Florian is a lazy shmug</echo>
 	</target>
 	
 	<!-- - - - - - - - - - - - - - - - - - - - - - -
@@ -92,6 +86,8 @@
 		</zip-->
 		<copy todir="${dist}/mode">
 			<fileset file="lib/js.jar" />
+			<fileset file="${processing.classes}/modes/java/mode/antlr.jar" />
+			<fileset file="${processing.classes}/modes/java/mode/JavaMode.jar" />
 		</copy>
 		
 		<copy todir="${dist}">
