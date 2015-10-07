@@ -1,9 +1,12 @@
 package de.bezier.mode.javascript;
 
 import processing.app.Base;
+import processing.app.Platform;
+import processing.app.Messages;
+import processing.app.Util;
 import processing.app.Sketch;
 import processing.app.SketchCode;
-import processing.app.Toolkit;
+import processing.app.ui.Toolkit;
 
 import java.awt.Container;
 import java.awt.Dimension;
@@ -70,7 +73,7 @@ public class DirectivesEditor
 	{
 		if ( editor.getSketch().isModified())
 		{
-			Base.showWarning( "Directives Editor",
+			Messages.showWarning( "Directives Editor",
 							  "Please save your sketch before changing "+
 							  "the directives.", null);
 			return;
@@ -286,7 +289,7 @@ public class DirectivesEditor
 	    JLabel label = new JLabel("Click here to read about directives.");
 		label.addMouseListener(new MouseListener(){
 			public void mouseClicked(MouseEvent e) {
-				Base.openURL("http://processingjs.org/reference/pjs%20directive");
+				Platform.openURL("http://processingjs.org/reference/pjs%20directive");
 			}
 			public void mouseEntered(MouseEvent e) {}
 			public void mouseExited(MouseEvent e) {}

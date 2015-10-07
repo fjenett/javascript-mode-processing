@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import processing.app.*;
+import processing.app.ui.*;
 import processing.mode.java.JavaMode;
 
 import javax.swing.*;
@@ -39,7 +40,7 @@ public class JavaScriptMode extends Mode
 //		try {
 //			loadKeywords(); // in JavaMode, sets tokenMarker
 //			loadAdditionalKeywords( 
-//				new File(Base.getContentFile("modes/java"), "keywords.txt" ),
+//				new File(Platform.getContentFile("modes/java"), "keywords.txt" ),
 //				tokenMarker
 //			);
 //		} 
@@ -54,7 +55,8 @@ public class JavaScriptMode extends Mode
 	 *	Called to create the actual editor when needed (once per Sketch)
 	 */
 	public Editor createEditor( Base base, String path, EditorState state )
-	{
+		throws EditorException {
+			
 		jsEditor = new JavaScriptEditor( base, path, state, this );
 
 		return jsEditor;
@@ -147,7 +149,7 @@ public class JavaScriptMode extends Mode
 	
   public File[] getKeywordFiles() {
     return new File[] { 
-      Base.getContentFile("modes/java/keywords.txt"),
+      Platform.getContentFile("modes/java/keywords.txt"),
       new File(folder, "keywords.txt")
     };
   }
@@ -223,21 +225,21 @@ public class JavaScriptMode extends Mode
 	 *	Overriding this from Mode.java to remove "Contributed Libraries"
 	 */
 
-	public JTree buildExamplesTree()
-	{
-		JTree superTree = super.buildExamplesTree();
+	// public JTree buildExamplesTree()
+	// {
+	// 	JTree superTree = super.buildExamplesTree();
 
-		DefaultTreeModel model = (DefaultTreeModel) superTree.getModel();
-		DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
-		DefaultMutableTreeNode contribExamples = (DefaultMutableTreeNode) root.getLastChild();
-		Object title = contribExamples.getUserObject();
-		if ( title != null && title.getClass() == String.class && ((String)title).equals("Contributed Libraries") )
-		{
-			root.remove( contribExamples );
-		}
+	// 	DefaultTreeModel model = (DefaultTreeModel) superTree.getModel();
+	// 	DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+	// 	DefaultMutableTreeNode contribExamples = (DefaultMutableTreeNode) root.getLastChild();
+	// 	Object title = contribExamples.getUserObject();
+	// 	if ( title != null && title.getClass() == String.class && ((String)title).equals("Contributed Libraries") )
+	// 	{
+	// 		root.remove( contribExamples );
+	// 	}
 
-		return superTree;
-	}
+	// 	return superTree;
+	// }
   
     /**
 	 *	Return the default extension for this mode, same as Java

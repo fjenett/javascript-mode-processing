@@ -12,6 +12,9 @@ import java.util.Map;
 import java.util.ArrayList;
 
 import processing.app.Base;
+import processing.app.Platform;
+import processing.app.Messages;
+import processing.app.Util;
 import processing.app.Mode;
 import processing.app.Sketch;
 import processing.app.SketchCode;
@@ -89,7 +92,7 @@ public class JavaScriptBuild
             String value = fields.get(sb.substring(start+2, end));
             sb.replace(start, end+2, value == null ? "" : value );
           } else {
-            Base.showWarning("Problem replacing field in template",
+            Messages.showWarning("Problem replacing field in template",
                              "The template appears to have an unterminated " +
                              "field. The output may look a little funny.");
           }
@@ -151,25 +154,25 @@ public class JavaScriptBuild
 
     if ( bin.exists() )
     {
-      Base.removeDescendants(bin);
-    } //else will be created during preprocesss
+      Util.removeDir( bin );
+    } //else will be created during preprocess
 
 	// pass through preprocessor to catch syntax errors
     // .. exceptions bubble up.
-    preprocess(bin);
+    preprocess( bin );
 
     // move the data files, copies contents of sketch/data/ to web-export/
     if (sketch.hasDataFolder())
 	{
       try {
-        Base.copyDir(sketch.getDataFolder(), bin);
+        Util.copyDir(sketch.getDataFolder(), bin);
 
       } catch (IOException e) {
         final String msg = "An exception occured while trying to copy the data folder. " +
                            "You may have to manually move the contents of sketch/data to " +
                            "the web-export/ folder. Processing.js doesn't look for a data " +
                            "folder, so lump them together.";
-        Base.showWarning("Problem building the sketch", msg);
+        Messages.showWarning("Problem building the sketch", msg);
         e.printStackTrace();
       }
     }
@@ -193,10 +196,10 @@ public class JavaScriptBuild
 	for ( String s : sketchFolderFiles )
 	{
 		try {
-			Base.copyFile( new File(sketch.getFolder(), s), new File(bin, s) );
+			Util.copyFile( new File(sketch.getFolder(), s), new File(bin, s) );
 		} catch ( IOException ioe ) {
 			String msg = "Unable to copy file: "+s;
-			Base.showWarning("Problem building the sketch", msg);
+			Messages.showWarning("Problem building the sketch", msg);
 			ioe.printStackTrace();
 			return false;
 		}
@@ -211,7 +214,8 @@ public class JavaScriptBuild
     // get width and height
     int wide = PApplet.DEFAULT_WIDTH;
     int high = PApplet.DEFAULT_HEIGHT;
-    String[] matches = PApplet.match(scrubbed, PdePreprocessor.SIZE_REGEX);
+    String SIZE_REGEX = "(?:^|\\s|;)size\\s*\\(\\s*([^\\s,]+)\\s*,\\s*([^\\s,\\)]+)\\s*,?\\s*([^\\)]*)\\s*\\)\\s*\\;";
+    String[] matches = PApplet.match(scrubbed, SIZE_REGEX);
     if (matches != null)
 	{
       try
@@ -229,7 +233,7 @@ public class JavaScriptBuild
 	          "HTML file to set the size of the applet.\n" +
 	          "Use only numeric values (not variables) for the size()\n" +
 	          "command. See the size() reference for an explanation.";
-	        Base.showWarning("Could not find applet size", message);
+	        Messages.showWarning("Could not find applet size", message);
 			// warn only once ..
 			((JavaScriptMode)mode).showSizeWarning = false;
 		}
@@ -272,7 +276,7 @@ public class JavaScriptBuild
 		File libsExport = new File( bin, "libs" );
 		if ( !libsExport.mkdir() )
 		{
-			Base.showWarning( "Error",
+			Messages.showWarning( "Error",
 			 				  "Unable to create 'libs' in export folder." );
 			return false;
 		}
@@ -298,7 +302,7 @@ public class JavaScriptBuild
 					}
 					try
 					{
-						Base.copyFile( libJS,
+						Util.copyFile( libJS,
 									   libJSDestFile );
 						jsImports.add( libJSDest.replaceAll( File.separator, "/" ) );
 
@@ -374,7 +378,7 @@ public class JavaScriptBuild
     } catch (IOException ioe) {
       final String msg = "There was a problem writing the html template " +
       		               "to the build folder.";
-      Base.showWarning("A problem occured during the build", msg);
+      Messages.showWarning("A problem occured during the build", msg);
       ioe.printStackTrace();
       return false;
     }
@@ -391,7 +395,7 @@ public class JavaScriptBuild
 		{
 		    try
 			{
-		      Base.copyFile( sketch.getMode().getContentFile(
+		      Util.copyFile( sketch.getMode().getContentFile(
 								TEMPLATE_FOLDER_NAME + File.separator + defaultJSFile
 							 ),
 		                     new File( bin, defaultJSFile )
@@ -402,7 +406,7 @@ public class JavaScriptBuild
 		                         "build folder. You will have to manually add " +
 		                         defaultJSFile +" to the build folder before the sketch " +
 		                         "will run.";
-		      Base.showWarning( "There was a problem writing to the build folder", msg);
+		      Messages.showWarning( "There was a problem writing to the build folder", msg);
 		      ioe.printStackTrace();
 		      //return false;
 		    }
@@ -430,7 +434,7 @@ public class JavaScriptBuild
 
 		try {
 			//TODO: this is potentially dangerous as it might override files in "web-export"
-			Base.copyDir( customTemplateFolder, appletJsFolder );
+			Util.copyDir( customTemplateFolder, appletJsFolder );
 			if ( !(new File( appletJsFolder, TEMPLATE_FILE_NAME )).delete() )
 			{
 				// ignore?
@@ -438,7 +442,7 @@ public class JavaScriptBuild
 			return new File( customTemplateFolder, TEMPLATE_FILE_NAME );
 		} catch ( Exception e ) {
 			String msg = "";
-			Base.showWarning("There was a problem copying your custom template folder", msg);
+			Messages.showWarning("There was a problem copying your custom template folder", msg);
 			e.printStackTrace();
 			return sketch.getMode().getContentFile(
 				TEMPLATE_FOLDER_NAME + File.separator + TEMPLATE_FILE_NAME
@@ -481,7 +485,7 @@ public class JavaScriptBuild
     }
     File bigFile = new File(bin, sketch.getName() + ".pde");
 	String bigCodeContents = bigCode.toString();
-    Base.saveFile( bigCodeContents, bigFile );
+    Util.saveFile( bigCodeContents, bigFile );
 
 	// RUN THROUGH JAVA-MODE PREPROCESSOR,
 	// some minor changes made since we are not running the result

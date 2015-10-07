@@ -3,9 +3,13 @@ package de.bezier.mode.javascript;
 import de.bezier.mode.javascript.BasicServer;
 
 import processing.app.Base;
+import processing.app.Platform;
+import processing.app.Messages;
+import processing.app.Util;
 import processing.app.Mode;
-import processing.app.Editor;
-import processing.app.EditorState;
+import processing.app.ui.Editor;
+import processing.app.ui.EditorState;
+import processing.app.ui.EditorException;
 import processing.app.Settings;
 
 import java.io.File;
@@ -39,7 +43,7 @@ public abstract class ServingEditor extends Editor implements BasicServerListene
 	 *	@see processing.app.Base
 	 */
 	protected ServingEditor ( Base base, String path, EditorState state, Mode mode )
-	{
+		throws EditorException {
 		super( base, path, state, mode );
 	}
 	
@@ -263,7 +267,7 @@ public abstract class ServingEditor extends Editor implements BasicServerListene
 	{
 		if ( serverRunning() )
 		{
-			Base.openURL( server.getAddress() );
+			Platform.openURL( server.getAddress() );
 		}
 	}
 	

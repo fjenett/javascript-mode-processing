@@ -6,8 +6,11 @@ import java.awt.event.MouseEvent;
 import javax.swing.JPopupMenu;
 
 import processing.app.Base;
-import processing.app.Editor;
-import processing.app.EditorToolbar;
+import processing.app.Platform;
+import processing.app.Messages;
+import processing.app.Util;
+import processing.app.ui.Editor;
+import processing.app.ui.EditorToolbar;
 
 /**
  *  This used to be part of Processing 2.0 beta and was 
@@ -40,19 +43,31 @@ public class JavaScriptToolbar extends EditorToolbar {
   }
 
 
-  public JavaScriptToolbar ( Editor editor, Base base )
+  public JavaScriptToolbar ( Editor editor )
   {
-    super(editor, base);
+    super(editor);
   }
 
 
   public void init ()
   {
-    Image[][] images = loadImages();
-    for (int i = 0; i < 6; i++)
-    {
-      addButton( getTitle(i, false), getTitle(i, true), images[i], i == NEW );
-    }
+    // Image[][] images = loadImages();
+    // for (int i = 0; i < 6; i++)
+    // {
+    //   addButton( getTitle(i, false), getTitle(i, true), images[i], i == NEW );
+    // }
+  }
+
+  public void handleRun ( int modifiers )
+  {
+    JavaScriptEditor jsEditor = (JavaScriptEditor) editor;
+    jsEditor.handleStartServer();
+  }
+
+  public void handleStop ()
+  {
+    JavaScriptEditor jsEditor = (JavaScriptEditor) editor;
+    jsEditor.handleStopServer();
   }
 
   public void handlePressed ( MouseEvent e, int index )

@@ -11,6 +11,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import processing.app.*;
+import processing.app.ui.*;
 import processing.mode.java.AutoFormat;
 
 import javax.swing.*;
@@ -30,7 +31,7 @@ public class JavaScriptEditor extends ServingEditor
   private DirectivesEditor directivesEditor;
 
   // tapping into Java mode might not be wanted?
-  processing.mode.java.PdeKeyListener listener;
+  // processing.mode.java.PdeKeyListener listener;
 
 	/**
 	 *	Constructor, overrides ServingEditor( .. )
@@ -38,10 +39,11 @@ public class JavaScriptEditor extends ServingEditor
 	 *	@see de.bezier.mode.javascript.ServingEditor
 	 */
   protected JavaScriptEditor ( Base base, String path, EditorState state, Mode mode )
-  {
+  	throws EditorException {
+    
     super(base, path, state, mode);
 
-	listener = new processing.mode.java.PdeKeyListener(this,textarea);
+	// listener = new processing.mode.java.PdeKeyListener(this,textarea);
 
     jsMode = (JavaScriptMode) mode;
   }
@@ -61,7 +63,7 @@ public class JavaScriptEditor extends ServingEditor
 	 */
   public EditorToolbar createToolbar ()
   {
-    return new JavaScriptToolbar(this, base);
+    return new JavaScriptToolbar(this);
   }
 
 	/**
@@ -205,7 +207,7 @@ public class JavaScriptEditor extends ServingEditor
     item = new JMenuItem("QuickStart for Processing Devs");
     item.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        Base.openURL("http://processingjs.org/articles/p5QuickStart.html");
+        Platform.openURL("http://processingjs.org/articles/p5QuickStart.html");
       }
     });
     menu.add(item);
@@ -213,7 +215,7 @@ public class JavaScriptEditor extends ServingEditor
     item = new JMenuItem("QuickStart for JavaScript Devs");
     item.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        Base.openURL("http://processingjs.org/articles/jsQuickStart.html");
+        Platform.openURL("http://processingjs.org/articles/jsQuickStart.html");
       }
     });
     menu.add(item);
@@ -232,7 +234,7 @@ public class JavaScriptEditor extends ServingEditor
     item = new JMenuItem("Troubleshooting");
     item.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          Base.openURL("http://wiki.processing.org/w/Troubleshooting");
+          Platform.openURL("http://wiki.processing.org/w/Troubleshooting");
         }
       });
     menu.add(item);
@@ -243,7 +245,7 @@ public class JavaScriptEditor extends ServingEditor
       public void actionPerformed(ActionEvent e) {
         //TODO get offline reference archive corresponding to the release
         // packaged with this mode see: P.js ticket 1146 "Offline Reference"
-        Base.openURL("http://processingjs.org/reference/");
+        Platform.openURL("http://processingjs.org/reference/");
       }
     });
     menu.add(item);
@@ -261,7 +263,7 @@ public class JavaScriptEditor extends ServingEditor
     item = new JMenuItem("Frequently Asked Questions");
     item.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          Base.openURL("http://wiki.processing.org/w/FAQ");
+          Platform.openURL("http://wiki.processing.org/w/FAQ");
         }
       });
     menu.add(item);
@@ -270,7 +272,7 @@ public class JavaScriptEditor extends ServingEditor
     item = new JMenuItem("Visit Processingjs.org");
     item.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          Base.openURL("http://processingjs.org/");
+          Platform.openURL("http://processingjs.org/");
         }
       });
     menu.add(item);
@@ -278,7 +280,7 @@ public class JavaScriptEditor extends ServingEditor
     item = new JMenuItem("Report a JavaScriptMode bug");
     item.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          Base.openURL("https://github.com/fjenett/javascript-mode-processing/issues");
+          Platform.openURL("https://github.com/fjenett/javascript-mode-processing/issues");
         }
       });
     menu.add(item);
@@ -376,11 +378,11 @@ public class JavaScriptEditor extends ServingEditor
 	if ( !tjs.exists() )
 	{
 		try {
-			Base.copyDir( ajs, tjs );
+			Util.copyDir( ajs, tjs );
 			statusNotice( "Default template copied." );
-			Base.openFolder( tjs );
+			Platform.openFolder( tjs );
 		} catch ( java.io.IOException ioe ) {
-			Base.showWarning("Copy default template folder",
+			Messages.showWarning("Copy default template folder",
 				"Something went wrong when copying the template folder.", ioe);
 		}
 	}
@@ -398,7 +400,7 @@ public class JavaScriptEditor extends ServingEditor
   	File tjs = getCustomTemplateFolder();
 	if ( tjs.exists() )
 	{
-		Base.openFolder( tjs );
+		Platform.openFolder( tjs );
 	}
 	else
 	{
@@ -450,7 +452,7 @@ public class JavaScriptEditor extends ServingEditor
 
     File file = new File( jsMode.getDefaultMode().getReferenceFolder(), filename );
     // Prepend with file:// and also encode spaces & other characters
-    Base.openURL( file.toURI().toString() );
+    Platform.openURL( file.toURI().toString() );
   }
 
 	/**
@@ -459,7 +461,7 @@ public class JavaScriptEditor extends ServingEditor
   /*private void handleFindReferenceImpl ()
   {
 	if ( textarea.isSelectionActive() ) {
-        Base.openURL(
+        Platform.openURL(
           "http://www.google.com/search?q=" +
           textarea.getSelectedText().trim() +
           "+site%3Ahttp%3A%2F%2Fprocessingjs.org%2Freference"
@@ -478,7 +480,7 @@ public class JavaScriptEditor extends ServingEditor
 		if ( !startServer( getExportFolder() ) )
 		{
 			if ( !handleExport( false ) ) return;
-			toolbar.activate(JavaScriptToolbar.RUN);
+			toolbar.activateRun();
 		}
 
 		// waiting for server to call "serverStarted() below ..."
@@ -499,7 +501,7 @@ public class JavaScriptEditor extends ServingEditor
   {
 	stopServer();
 
-	toolbar.deactivate(JavaScriptToolbar.RUN);
+	toolbar.deactivateRun();
   }
 
 	/**
@@ -514,7 +516,9 @@ public class JavaScriptEditor extends ServingEditor
 	}
 	else
 	{
-      toolbar.activate(JavaScriptToolbar.EXPORT);
+      
+      //toolbar.activate(JavaScriptToolbar.EXPORT);
+      
       try
 	  {
         boolean success = jsMode.handleExport(sketch);
@@ -522,7 +526,7 @@ public class JavaScriptEditor extends ServingEditor
 		{
           File exportFolder = new File( sketch.getFolder(),
  										  JavaScriptBuild.EXPORTED_FOLDER_NAME );
-          Base.openFolder( exportFolder );
+          Platform.openFolder( exportFolder );
 
           statusNotice("Finished exporting.");
         } else if ( !success ) {
@@ -531,10 +535,13 @@ public class JavaScriptEditor extends ServingEditor
         }
       } catch (Exception e) {
         statusError(e);
-	    toolbar.deactivate(JavaScriptToolbar.EXPORT);
+
+	    //toolbar.deactivate(JavaScriptToolbar.EXPORT);
+		
 		return false;
       }
-      toolbar.deactivate(JavaScriptToolbar.EXPORT);
+
+      //toolbar.deactivate(JavaScriptToolbar.EXPORT);
     }
 	return true;
   }
@@ -578,9 +585,11 @@ public class JavaScriptEditor extends ServingEditor
 	 */
   public void handleSave ()
   {
-    toolbar.activate(JavaScriptToolbar.SAVE);
+    // toolbar.activate(JavaScriptToolbar.SAVE);
+
     handleSaveImpl();
-    toolbar.deactivate(JavaScriptToolbar.SAVE);
+    
+    // toolbar.deactivate(JavaScriptToolbar.SAVE);
   }
 
 	/**
@@ -615,9 +624,12 @@ public class JavaScriptEditor extends ServingEditor
 	 */
   public boolean handleSaveAs ()
   {
-    toolbar.activate(JavaScriptToolbar.SAVE);
+    // toolbar.activate(JavaScriptToolbar.SAVE);
+    
     boolean result = super.handleSaveAs();
-    toolbar.deactivate(JavaScriptToolbar.SAVE);
+
+    // toolbar.deactivate(JavaScriptToolbar.SAVE);
+    
     return result;
   }
 
@@ -628,7 +640,7 @@ public class JavaScriptEditor extends ServingEditor
 	 */
 	public void handleImportLibrary ( String jarPath )
 	{
-		// Base.showWarning("Processing.js doesn't support libraries",
+		// Messages.showWarning("Processing.js doesn't support libraries",
 		//                  "Libraries are not supported. Import statements are " +
 		//                  "ignored, and code relying on them will break.",
 		//                  null);
@@ -646,7 +658,7 @@ public class JavaScriptEditor extends ServingEditor
 		// could also scan the text in the file to see if each import
 		// statement is already in there, but if the user has the import
 		// commented out, then this will be a problem.
-		String[] list = Base.packageListFromClassPath(jarPath);
+		String[] list = Util.packageListFromClassPath(jarPath).array();
 		StringBuffer buffer = new StringBuffer();
 		for ( int i = 0; i < list.length; i++ ) 
 		{
@@ -674,7 +686,8 @@ public class JavaScriptEditor extends ServingEditor
   		super.serverStarted();
 
 		if ( !handleExport( false ) ) return;
-		toolbar.activate(JavaScriptToolbar.RUN);
+		
+		toolbar.activateRun();
   }
 
 	// ----------------------------------------
