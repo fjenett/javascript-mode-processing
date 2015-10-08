@@ -1,3 +1,8 @@
+/**
+ *	This used to be part of Processing 2.0 beta and was 
+ *	moved out on 2013-02-25 
+ */
+
 package de.bezier.mode.javascript;
 
 import de.bezier.mode.javascript.ServingEditor;
@@ -15,11 +20,6 @@ import processing.app.ui.*;
 import processing.mode.java.AutoFormat;
 
 import javax.swing.*;
-
-/**
- *	This used to be part of Processing 2.0 beta and was 
- *	moved out on 2013-02-25 
- */
 
 public class JavaScriptEditor extends ServingEditor
 {
@@ -42,8 +42,6 @@ public class JavaScriptEditor extends ServingEditor
   	throws EditorException {
     
     super(base, path, state, mode);
-
-	// listener = new processing.mode.java.PdeKeyListener(this,textarea);
 
     jsMode = (JavaScriptMode) mode;
   }
@@ -510,7 +508,7 @@ public class JavaScriptEditor extends ServingEditor
 	 */
   public boolean handleExport ( boolean openFolder )
   {
-    if ( !handleExportCheckModified() )
+    if ( !handleExportCheckModifiedMod() )
     {
 		return false;
 	}
@@ -595,7 +593,7 @@ public class JavaScriptEditor extends ServingEditor
 	/**
 	 *	Called from handleExport()
 	 */
-  private boolean handleExportCheckModified ()
+  private boolean handleExportCheckModifiedMod ()
   {
     if (sketch.isModified()) {
       Object[] options = { "OK", "Cancel" };
@@ -610,7 +608,6 @@ public class JavaScriptEditor extends ServingEditor
 
       if (result == JOptionPane.OK_OPTION) {
         handleSave(true);
-
       } else {
         statusNotice("Export canceled, changes must first be saved.");
         return false;

@@ -12,6 +12,8 @@ import processing.app.ui.EditorState;
 import processing.app.ui.EditorException;
 import processing.app.Settings;
 
+import processing.mode.java.JavaEditor;
+
 import java.io.File;
 import java.io.IOException;
 import javax.swing.JOptionPane;
@@ -24,7 +26,9 @@ import javax.swing.JOptionPane;
  *	moved out on 2013-02-25 
  */
 
-public abstract class ServingEditor extends Editor implements BasicServerListener
+public abstract class ServingEditor 
+	extends JavaEditor 
+	implements BasicServerListener
 {
 	public final static String PROP_KEY_SERVER_PORT = "basicserver.port";
 	
@@ -211,9 +215,9 @@ public abstract class ServingEditor extends Editor implements BasicServerListene
 		}
 		else if ( server.isRunning() )
 		{
-			statusNotice( "Server running (" + 
+			statusNotice( "Server running ( " + 
 						  server.getAddress() +
-						  "), reload your browser window." );
+						  " ), reload your browser window." );
 						
 			return false;
 		}

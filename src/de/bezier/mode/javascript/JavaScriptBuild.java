@@ -240,6 +240,8 @@ public class JavaScriptBuild
       }
     }  // else no size() command found, defaults will be used
 
+
+
 	// try resolve imports
 	ArrayList<String> importPackages = new ArrayList<String>();
 	String[] lines = scrubbed.split( "\n" );
@@ -493,7 +495,7 @@ public class JavaScriptBuild
 	// surface
 
 	PdePreprocessor preprocessor = new PdePreprocessor( sketch.getName() );
-	//PreprocessorResult result;
+	preprocessor.initSketchSize( bigCodeContents, true );
 
     try
 	{

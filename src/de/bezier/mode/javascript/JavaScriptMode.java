@@ -1,15 +1,3 @@
-package de.bezier.mode.javascript;
-
-import java.io.File;
-import java.io.IOException;
-
-import processing.app.*;
-import processing.app.ui.*;
-import processing.mode.java.JavaMode;
-
-import javax.swing.*;
-import javax.swing.tree.*;
-
 /**
  *	JS Mode for Processing based on Processing.js. Comes with a server as
  *	replacement for the normal runner.
@@ -18,7 +6,21 @@ import javax.swing.tree.*;
  *	moved out on 2013-02-25 
  */
 
-public class JavaScriptMode extends Mode
+package de.bezier.mode.javascript;
+
+import java.io.File;
+import java.io.IOException;
+
+import processing.app.*;
+import processing.app.ui.*;
+import processing.mode.java.JavaMode;
+import processing.mode.java.JavaEditor;
+
+import javax.swing.*;
+import javax.swing.tree.*;
+
+public class JavaScriptMode 
+extends JavaMode
 {
 	// show that warning only once per run-cycle as we are 
 	// continously exporting behind the scenes at every save
@@ -43,7 +45,7 @@ public class JavaScriptMode extends Mode
 //				new File(Platform.getContentFile("modes/java"), "keywords.txt" ),
 //				tokenMarker
 //			);
-//		} 
+//		}
 //		catch ( IOException e ) 
 //		{
 //			Base.showError( "Problem loading keywords",
@@ -54,11 +56,10 @@ public class JavaScriptMode extends Mode
 	/**
 	 *	Called to create the actual editor when needed (once per Sketch)
 	 */
-	public Editor createEditor( Base base, String path, EditorState state )
+	public Editor createEditor ( Base base, String path, EditorState state )
 		throws EditorException {
-			
-		jsEditor = new JavaScriptEditor( base, path, state, this );
 
+		jsEditor = new JavaScriptEditor( base, path, state, this );
 		return jsEditor;
 	}
 
